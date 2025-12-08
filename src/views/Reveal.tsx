@@ -43,7 +43,7 @@ export function Reveal() {
                             </div>
                         </div>
 
-                        <div className="w-full px-8 flex-1 flex flex-col">
+                        <div className="w-full flex-1 flex flex-col">
                             <div className="mx-auto w-24 h-24 bg-blue-500/20 rounded-full flex items-center justify-center mb-8 animate-pulse">
                                 <Eye size={40} className="text-blue-400" />
                             </div>

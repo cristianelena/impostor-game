@@ -32,12 +32,12 @@ export function TopicSelection() {
                                     border transition-all cursor-pointer group
                                     ${isExhausted
                                         ? 'bg-red-900/10 border-red-500/10 opacity-50 cursor-not-allowed'
-                                        : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-blue-500/50 hover:scale-[1.02] active:scale-95'
+                                        : 'bg-white/5 border-white/5 active:bg-white/10 active:border-blue-500/50 active:scale-95'
                                     }
                                 `}
                             >
                                 <div className="flex items-center gap-4 p-2">
-                                    <div className={`text-4xl transition-transform duration-300 ${!isExhausted && 'group-hover:scale-110'}`}>
+                                    <div className="text-4xl">
                                         {topic.emoji}
                                     </div>
                                     <div className="flex-1 text-left">
