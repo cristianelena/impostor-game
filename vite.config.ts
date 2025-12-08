@@ -39,7 +39,7 @@ export default defineConfig({
     })
   ],
   build: {
-    outDir: 'docs' // Cambia la carpeta de salida a 'docs'
+    outDir: 'docs'
   },
   server: {
     host: true // Esto le indica a Vite que escuche en 0.0.0.0
