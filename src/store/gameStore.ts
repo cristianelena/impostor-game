@@ -20,6 +20,7 @@ interface GameState {
     // For Reveal Phase
     currentRevealIndex: number;
     usedLocations: Record<string, string[]>;
+    currentTopicId: string | null;
 
     // Actions
     addPlayer: (name: string) => void;
@@ -43,6 +44,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     roundDuration: 300, // 5 mins default
     usedLocations: {}, // topicId -> list of used locations
     currentRevealIndex: 0,
+    currentTopicId: null,
 
     addPlayer: (name) => set((state) => ({
         players: [
@@ -106,7 +108,8 @@ export const useGameStore = create<GameState>((set, get) => ({
             location,
             impostorId,
             currentRevealIndex: 0,
-            usedLocations: newUsedLocations
+            usedLocations: newUsedLocations,
+            currentTopicId: topicId
         });
     },
 

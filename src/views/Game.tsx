@@ -5,9 +5,13 @@ import { Card } from '../components/ui/Card';
 import { RotateCcw } from 'lucide-react';
 import { TEXTS } from '../config/texts';
 
+import { TOPICS } from '../config/topics';
+
 export function Game() {
-    const { roundDuration, resetGame, startVoting } = useGameStore();
+    const { roundDuration, resetGame, startVoting, currentTopicId } = useGameStore();
     const [timeLeft, setTimeLeft] = useState(roundDuration);
+
+    const topicName = TOPICS.find(t => t.id === currentTopicId)?.name || 'Desconocido';
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -48,11 +52,11 @@ export function Game() {
                     />
                 </div>
 
-                {/* Hints */}
+                {/* Topic Info */}
                 <Card className="mt-8 bg-zinc-800/30">
-                    <p className="text-gray-400 text-sm mb-2">{TEXTS.game.topicLocation}</p>
-                    <p className="text-xl font-bold text-white/50 filter blur-sm hover:blur-none transition-all cursor-pointer select-none active:blur-none">
-                        {TEXTS.game.touchToPeek}
+                    <p className="text-gray-400 text-sm mb-2">Topico</p>
+                    <p className="text-xl font-bold text-white">
+                        {topicName}
                     </p>
                 </Card>
             </div>
