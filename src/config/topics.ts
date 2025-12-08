@@ -47,5 +47,14 @@ export const TOPICS: Topic[] = [
             "Castillo de Hogwarts", "Mordor", "Narnia", "País de las Maravillas",
             "Atlantis", "Olimpo", "Valhalla", "Fabrica de Chocolate", "Casa de Papel", "Death Star"
         ]
+    },
+    {
+        id: "love",
+        name: "Amor",
+        description: "Lugares románticos",
+        emoji: "❤️",
+        locations: [
+            "Parque de atracciones", "Café"
+        ]
     }
 ];

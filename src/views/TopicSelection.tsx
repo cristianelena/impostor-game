@@ -4,7 +4,7 @@ import { TOPICS } from '../config/topics';
 import { motion } from 'framer-motion';
 
 export function TopicSelection() {
-    const { selectTopicAndStart } = useGameStore();
+    const { selectTopicAndStart, usedLocations } = useGameStore();
 
     return (
         <div className="flex flex-col h-full gap-6 relative z-20">
@@ -16,33 +16,43 @@ export function TopicSelection() {
             </div>
 
             <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 pr-2 pb-4 grid grid-cols-1 gap-4">
-                {TOPICS.map((topic, index) => (
-                    <motion.div
-                        key={topic.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                    >
-                        <Card
-                            onClick={() => selectTopicAndStart(topic.id)}
-                            className="bg-white/5 border border-white/5 hover:bg-white/10 hover:border-blue-500/50 hover:scale-[1.02] transition-all cursor-pointer group active:scale-95"
+                {TOPICS.map((topic, index) => {
+                    const isExhausted = (usedLocations[topic.id]?.length || 0) >= topic.locations.length;
+
+                    return (
+                        <motion.div
+                            key={topic.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
                         >
-                            <div className="flex items-center gap-4 p-2">
-                                <div className="text-4xl group-hover:scale-110 transition-transform duration-300">
-                                    {topic.emoji}
+                            <Card
+                                onClick={() => !isExhausted && selectTopicAndStart(topic.id)}
+                                className={`
+                                    border transition-all cursor-pointer group
+                                    ${isExhausted
+                                        ? 'bg-red-900/10 border-red-500/10 opacity-50 cursor-not-allowed'
+                                        : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-blue-500/50 hover:scale-[1.02] active:scale-95'
+                                    }
+                                `}
+                            >
+                                <div className="flex items-center gap-4 p-2">
+                                    <div className={`text-4xl transition-transform duration-300 ${!isExhausted && 'group-hover:scale-110'}`}>
+                                        {topic.emoji}
+                                    </div>
+                                    <div className="flex-1 text-left">
+                                        <h3 className={`font-bold text-lg transition-colors ${isExhausted ? 'text-gray-500' : 'text-white group-hover:text-blue-300'}`}>
+                                            {topic.name} {isExhausted && '(Agotado)'}
+                                        </h3>
+                                        <p className={`text-sm ${isExhausted ? 'text-red-900/50' : 'text-gray-400 group-hover:text-gray-300'}`}>
+                                            {topic.description}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="flex-1 text-left">
-                                    <h3 className="font-bold text-lg text-white group-hover:text-blue-300 transition-colors">
-                                        {topic.name}
-                                    </h3>
-                                    <p className="text-sm text-gray-400 group-hover:text-gray-300">
-                                        {topic.description}
-                                    </p>
-                                </div>
-                            </div>
-                        </Card>
-                    </motion.div>
-                ))}
+                            </Card>
+                        </motion.div>
+                    );
+                })}
             </div>
         </div>
     );

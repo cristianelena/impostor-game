@@ -19,6 +19,7 @@ interface GameState {
 
     // For Reveal Phase
     currentRevealIndex: number;
+    usedLocations: Record<string, string[]>;
 
     // Actions
     addPlayer: (name: string) => void;
@@ -40,6 +41,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     location: null,
     impostorId: null,
     roundDuration: 300, // 5 mins default
+    usedLocations: {}, // topicId -> list of used locations
     currentRevealIndex: 0,
 
     addPlayer: (name) => set((state) => ({
@@ -67,13 +69,25 @@ export const useGameStore = create<GameState>((set, get) => ({
     },
 
     selectTopicAndStart: (topicId) => {
-        const { players } = get();
+        const { players, usedLocations } = get();
         const topic = TOPICS.find(t => t.id === topicId);
 
         if (!topic) return;
 
-        // Pick random location from selected topic
-        const location = topic.locations[Math.floor(Math.random() * topic.locations.length)];
+        // Filter out used locations
+        const topicUsed = usedLocations[topicId] || [];
+        const availableLocations = topic.locations.filter(loc => !topicUsed.includes(loc));
+
+        if (availableLocations.length === 0) return; // Should not happen if UI handles it
+
+        // Pick random location from available
+        const location = availableLocations[Math.floor(Math.random() * availableLocations.length)];
+
+        // Update used locations
+        const newUsedLocations = {
+            ...usedLocations,
+            [topicId]: [...topicUsed, location]
+        };
 
         // Pick random impostor
         const impostorIndex = Math.floor(Math.random() * players.length);
@@ -91,7 +105,8 @@ export const useGameStore = create<GameState>((set, get) => ({
             players: newPlayers,
             location,
             impostorId,
-            currentRevealIndex: 0
+            currentRevealIndex: 0,
+            usedLocations: newUsedLocations
         });
     },
 
@@ -125,7 +140,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     },
 
     resetGame: () => set({
-        phase: 'LOBBY',
+        phase: 'TOPIC_SELECTION',
         location: null,
         impostorId: null,
         currentRevealIndex: 0,
