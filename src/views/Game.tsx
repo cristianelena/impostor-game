@@ -57,19 +57,21 @@ export function Game() {
                 </Card>
             </div>
 
-            <div className="w-full grid gap-4">
+            <div className="flex-1" />
+
+            <div className="w-full grid gap-4 mt-auto">
+                <Button variant="ghost" onClick={resetGame} className="text-white/30">
+                    <RotateCcw size={16} /> {TEXTS.game.reset}
+                </Button>
                 {timeLeft === 0 ? (
                     <Button size="lg" variant="primary" onClick={startVoting} className="w-full py-6 text-xl">
                         {TEXTS.game.voteNow}
                     </Button>
                 ) : (
-                    <Button size="lg" variant="danger" onClick={startVoting} className="w-full">
+                    <Button size="lg" variant="danger" onClick={startVoting} className="w-full py-6 text-xl">
                         {TEXTS.game.endGameEarly}
                     </Button>
                 )}
-                <Button variant="ghost" onClick={resetGame} className="text-white/30">
-                    <RotateCcw size={16} /> {TEXTS.game.reset}
-                </Button>
             </div>
         </div>
     );

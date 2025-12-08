@@ -28,7 +28,9 @@ export function Results() {
                 <div className="text-4xl font-bold text-blue-300">{location}</div>
             </Card>
 
-            <Button size="lg" onClick={resetGame} variant="outline" className="w-full py-4 mt-8">
+            <div className="flex-1" />
+
+            <Button size="lg" onClick={resetGame} variant="outline" className="w-full py-6 mt-auto">
                 <RotateCcw size={20} /> {TEXTS.results.playAgain}
             </Button>
         </div>

@@ -72,7 +72,9 @@ export function Lobby() {
                 </div>
             </Card>
 
-            <div className="pb-4">
+            <div className="flex-1 min-h-4" /> {/* Spacer */}
+
+            <div className="pb-4 mt-auto">
                 <Button
                     size="lg"
                     onClick={startGame}

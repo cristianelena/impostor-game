@@ -21,10 +21,12 @@ export function Voting() {
                 <p className="text-2xl font-bold text-yellow-100">{TEXTS.voting.whoIsImpostor}</p>
             </Card>
 
+            <div className="flex-1" />
+
             <Button
                 size="lg"
                 onClick={endGame}
-                className="w-full py-6 text-xl bg-yellow-600 hover:bg-yellow-500 text-black border-yellow-400/50 shadow-[0_0_20px_rgba(234,179,8,0.3)] font-black"
+                className="w-full py-6 text-xl bg-yellow-600 hover:bg-yellow-500 text-black border-yellow-400/50 shadow-[0_0_20px_rgba(234,179,8,0.3)] font-black mt-auto"
             >
                 {TEXTS.voting.revealTruth}
             </Button>

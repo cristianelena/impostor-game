@@ -34,7 +34,7 @@ export function Reveal() {
                         animate={{ opacity: 1, scale: 1, rotateX: 0 }}
                         exit={{ opacity: 0, scale: 0.9, rotateX: -20 }}
                         transition={{ type: "spring", bounce: 0.4 }}
-                        className="text-center space-y-8 w-full"
+                        className="text-center space-y-8 w-full h-full flex flex-col"
                     >
                         <div>
                             <h2 className="text-2xl font-bold text-gray-400 uppercase tracking-widest mb-2">{TEXTS.reveal.passDeviceTo}</h2>
@@ -43,12 +43,14 @@ export function Reveal() {
                             </div>
                         </div>
 
-                        <div className="w-full px-8">
+                        <div className="w-full px-8 flex-1 flex flex-col">
                             <div className="mx-auto w-24 h-24 bg-blue-500/20 rounded-full flex items-center justify-center mb-8 animate-pulse">
                                 <Eye size={40} className="text-blue-400" />
                             </div>
 
-                            <Button size="lg" onClick={handleReveal} className="w-full py-6 text-xl">
+                            <div className="flex-1" />
+
+                            <Button size="lg" onClick={handleReveal} className="w-full py-6 text-xl mt-auto">
                                 {TEXTS.reveal.revealRole}
                             </Button>
                         </div>
@@ -59,7 +61,7 @@ export function Reveal() {
                         initial={{ opacity: 0, scale: 1.1, rotateY: 180 }}
                         animate={{ opacity: 1, scale: 1, rotateY: 0 }}
                         exit={{ opacity: 0, scale: 0.9, rotateY: -180 }}
-                        className="text-center space-y-6 w-full perspective-1000"
+                        className="text-center space-y-6 w-full perspective-1000 h-full flex flex-col"
                     >
                         <Card gradient className="py-16 border-2 border-white/20 shadow-2xl shadow-purple-500/20 flex flex-col items-center justify-center min-h-[400px]">
                             {currentPlayer.role === 'impostor' ? (
@@ -86,12 +88,16 @@ export function Reveal() {
                                 </div>
                             )}
                         </Card>
-                        <Button size="lg" variant="secondary" onClick={handleNext} className="w-full py-6 text-xl">
+
+                        <div className="flex-1" />
+
+                        <Button size="lg" variant="secondary" onClick={handleNext} className="w-full py-6 text-xl mt-auto">
                             {TEXTS.reveal.hideRole}
                         </Button>
                     </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
+                )
+                }
+            </AnimatePresence >
+        </div >
     );
 }
