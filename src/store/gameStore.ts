@@ -1,6 +1,7 @@
 import { create } from 'zustand';
+import { TOPICS } from '../config/topics';
 
-export type GamePhase = 'LOBBY' | 'REVEAL' | 'PLAYING' | 'VOTING' | 'RESULTS';
+export type GamePhase = 'LOBBY' | 'TOPIC_SELECTION' | 'REVEAL' | 'PLAYING' | 'VOTING' | 'RESULTS';
 
 export interface Player {
     id: string;
@@ -23,7 +24,8 @@ interface GameState {
     addPlayer: (name: string) => void;
     removePlayer: (id: string) => void;
     setDuration: (seconds: number) => void;
-    startGame: () => void;
+    startGame: () => void; // Moves to Topic Selection
+    selectTopicAndStart: (topicId: string) => void; // Actually starts the game logic
     nextReveal: () => void; // Move to next player to reveal
     markRoleSeen: () => void; // Current player saw role
     startTimer: () => void;
@@ -31,8 +33,6 @@ interface GameState {
     endGame: () => void;
     resetGame: () => void;
 }
-
-import { TEXTS } from '../config/texts';
 
 export const useGameStore = create<GameState>((set, get) => ({
     phase: 'LOBBY',
@@ -63,9 +63,17 @@ export const useGameStore = create<GameState>((set, get) => ({
     startGame: () => {
         const { players } = get();
         if (players.length < 3) return; // Minimum 3 players
+        set({ phase: 'TOPIC_SELECTION' });
+    },
 
-        // Pick random location
-        const location = TEXTS.locations[Math.floor(Math.random() * TEXTS.locations.length)];
+    selectTopicAndStart: (topicId) => {
+        const { players } = get();
+        const topic = TOPICS.find(t => t.id === topicId);
+
+        if (!topic) return;
+
+        // Pick random location from selected topic
+        const location = topic.locations[Math.floor(Math.random() * topic.locations.length)];
 
         // Pick random impostor
         const impostorIndex = Math.floor(Math.random() * players.length);
@@ -105,8 +113,6 @@ export const useGameStore = create<GameState>((set, get) => ({
     },
 
     startTimer: () => {
-        // Just a placeholder if we need specific start logic, 
-        // but switching to PLAYING usually implies timer start in the UI.
         set({ phase: 'PLAYING' });
     },
 

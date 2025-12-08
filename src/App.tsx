@@ -1,6 +1,7 @@
 import { ScreenLayout } from './components/layout/ScreenLayout';
 import { useGameStore } from './store/gameStore';
 import { Lobby } from './views/Lobby';
+import { TopicSelection } from './views/TopicSelection';
 import { Reveal } from './views/Reveal';
 import { Game } from './views/Game';
 import { Voting } from './views/Voting';
@@ -23,6 +24,18 @@ function App() {
             transition={{ duration: 0.3 }}
           >
             <Lobby />
+          </motion.div>
+        )}
+        {phase === 'TOPIC_SELECTION' && (
+          <motion.div
+            key="topics"
+            className="h-full"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.3 }}
+          >
+            <TopicSelection />
           </motion.div>
         )}
         {phase === 'REVEAL' && (
