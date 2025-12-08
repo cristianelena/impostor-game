@@ -109,7 +109,8 @@ export const useGameStore = create<GameState>((set, get) => ({
             impostorId,
             currentRevealIndex: 0,
             usedLocations: newUsedLocations,
-            currentTopicId: topicId
+            currentTopicId: topicId,
+            roundDuration: players.length * 60 // 1 minute per player
         });
     },
 
