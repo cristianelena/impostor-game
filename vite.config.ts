@@ -2,6 +2,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
+const repoName = '/impostor-game/';
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -38,6 +40,7 @@ export default defineConfig({
       }
     })
   ],
+  base: repoName,
   build: {
     outDir: 'docs'
   },
