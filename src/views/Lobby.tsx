@@ -27,7 +27,7 @@ export function Lobby() {
                 <p className="text-gray-400 font-medium">{TEXTS.lobby.subtitle}</p>
             </div>
 
-            <Card className="flex-1 flex flex-col gap-4 overflow-hidden shadow-2xl shadow-purple-900/20">
+            <Card className="flex flex-col gap-4 shadow-2xl shadow-purple-900/20">
                 <form onSubmit={handleAdd} className="flex gap-2">
                     <input
                         type="text"
@@ -41,7 +41,7 @@ export function Lobby() {
                     </Button>
                 </form>
 
-                <div className="flex-1 overflow-y-auto space-y-2 pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                <div className="space-y-2">
                     <AnimatePresence mode="popLayout">
                         {players.map((p) => (
                             <motion.div
@@ -64,7 +64,7 @@ export function Lobby() {
                     </AnimatePresence>
 
                     {players.length === 0 && (
-                        <div className="h-full flex flex-col items-center justify-center text-gray-500 opacity-50 space-y-2">
+                        <div className="py-8 flex flex-col items-center justify-center text-gray-500 opacity-50 space-y-2">
                             <UserPlus size={48} />
                             <p>{TEXTS.lobby.emptyState}</p>
                         </div>

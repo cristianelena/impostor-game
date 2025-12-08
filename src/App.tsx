@@ -4,6 +4,7 @@ import { Lobby } from './views/Lobby';
 import { TopicSelection } from './views/TopicSelection';
 import { Reveal } from './views/Reveal';
 import { Game } from './views/Game';
+import { Sorting } from './views/Sorting';
 import { Voting } from './views/Voting';
 import { Results } from './views/Results';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -60,6 +61,18 @@ function App() {
             transition={{ duration: 0.4 }}
           >
             <Game />
+          </motion.div>
+        )}
+        {phase === 'SORTING' && (
+          <motion.div
+            key="sorting"
+            className="h-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <Sorting />
           </motion.div>
         )}
         {phase === 'VOTING' && (

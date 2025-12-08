@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { TOPICS } from '../config/topics';
 
-export type GamePhase = 'LOBBY' | 'TOPIC_SELECTION' | 'REVEAL' | 'PLAYING' | 'VOTING' | 'RESULTS';
+export type GamePhase = 'LOBBY' | 'TOPIC_SELECTION' | 'REVEAL' | 'SORTING' | 'PLAYING' | 'VOTING' | 'RESULTS';
 
 export interface Player {
     id: string;
@@ -124,8 +124,8 @@ export const useGameStore = create<GameState>((set, get) => ({
     nextReveal: () => {
         const { currentRevealIndex, players } = get();
         if (currentRevealIndex + 1 >= players.length) {
-            // All revealed, start game
-            set({ phase: 'PLAYING' });
+            // All revealed, start sorting lottery
+            set({ phase: 'SORTING' });
         } else {
             set({ currentRevealIndex: currentRevealIndex + 1 });
         }
