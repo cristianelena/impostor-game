@@ -140,10 +140,8 @@ export const useGameStore = create<GameState>((set, get) => ({
     },
 
     resetGame: () => set({
-        phase: 'TOPIC_SELECTION',
-        location: null,
-        impostorId: null,
-        currentRevealIndex: 0,
-        players: get().players.map(p => ({ ...p, role: null, hasSeenRole: false }))
+        phase: 'TOPIC_SELECTION'
+        // We don't clear data here to allow 'Results' view to show info during exit animation.
+        // All game data is overwritten in 'selectTopicAndStart' before the next game starts.
     })
 }));
