@@ -32,6 +32,14 @@ export function Button({ className, variant = "primary", size = "md", children, 
                 sizes[size],
                 className
             )}
+            onClick={(e) => {
+                const soundType = (variant === 'primary' || variant === 'danger') ? 'heavy' : 'soft';
+                // Only play if not disabled
+                if (!props.disabled) {
+                    import('../../utils/synth').then(({ synth }) => synth.playClick(soundType));
+                }
+                props.onClick?.(e);
+            }}
             {...props}
         >
             {children}

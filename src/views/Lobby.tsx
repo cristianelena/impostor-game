@@ -19,7 +19,7 @@ export function Lobby() {
     };
 
     return (
-        <div className="flex flex-col gap-6 h-full">
+        <div className="flex flex-col gap-6 h-full relative">
             <div className="text-center space-y-2 pt-8">
                 <h1 className="text-5xl font-black bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text tracking-tighter">
                     {TEXTS.lobby.title}

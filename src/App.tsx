@@ -9,8 +9,16 @@ import { Voting } from './views/Voting';
 import { Results } from './views/Results';
 import { AnimatePresence, motion } from 'framer-motion';
 
+import { synth } from './utils/synth';
+import { useEffect } from 'react';
+
 function App() {
   const phase = useGameStore((state) => state.phase);
+
+  useEffect(() => {
+    // Play swoosh on phase change (except initial load if you want, but swoosh on load is fine/cool)
+    synth.playSwoosh();
+  }, [phase]);
 
   return (
     <ScreenLayout>

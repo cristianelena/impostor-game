@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { motion } from 'framer-motion';
 
+import { synth } from '../utils/synth';
+
 export function Sorting() {
     const { players, startTimer } = useGameStore();
     const [displayPlayer, setDisplayPlayer] = useState('...');
@@ -16,6 +18,7 @@ export function Sorting() {
         interval = setInterval(() => {
             const randomPlayer = players[Math.floor(Math.random() * players.length)];
             setDisplayPlayer(randomPlayer.name);
+            synth.playClick('soft'); // Sound sync
         }, 100);
 
         // Pick winner and stop
@@ -24,6 +27,10 @@ export function Sorting() {
             const winner = players[Math.floor(Math.random() * players.length)];
             setFinalPlayer(winner.name);
             setDisplayPlayer(winner.name);
+
+            // Winner sound
+            synth.playTone(500, 0.1, 'sine');
+            setTimeout(() => synth.playTone(1000, 0.4, 'triangle'), 100);
 
             // Move to game after showing winner
             setTimeout(() => {

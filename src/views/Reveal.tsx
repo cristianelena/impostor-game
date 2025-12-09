@@ -6,6 +6,8 @@ import { Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TEXTS } from '../config/texts';
 
+import { synth } from '../utils/synth';
+
 export function Reveal() {
     const { players, currentRevealIndex, location, markRoleSeen, nextReveal } = useGameStore();
     const [isRevealed, setIsRevealed] = useState(false);
@@ -15,6 +17,9 @@ export function Reveal() {
     const handleReveal = () => {
         setIsRevealed(true);
         markRoleSeen();
+        // Dramatic reveal sound
+        synth.playTone(100, 0.5, 'square');
+        setTimeout(() => synth.playTone(50, 1.0, 'sine'), 100);
     };
 
     const handleNext = () => {

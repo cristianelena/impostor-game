@@ -7,6 +7,8 @@ import { TEXTS } from '../config/texts';
 
 import { TOPICS } from '../config/topics';
 
+import { synth } from '../utils/synth';
+
 export function Game() {
     const { roundDuration, resetGame, startVoting, currentTopicId } = useGameStore();
     const [timeLeft, setTimeLeft] = useState(roundDuration);
@@ -25,6 +27,19 @@ export function Game() {
         }, 1000);
         return () => clearInterval(timer);
     }, []);
+
+    // Sound Effect Logic
+    useEffect(() => {
+        if (timeLeft === 0) {
+            // Alarm
+            synth.playTone(880, 0.2, 'square');
+            setTimeout(() => synth.playTone(880, 0.2, 'square'), 300);
+            setTimeout(() => synth.playTone(880, 0.2, 'square'), 600);
+        } else if (timeLeft <= 10) {
+            // Tick
+            synth.playClick('soft');
+        }
+    }, [timeLeft]);
 
     const formatTime = (seconds: number) => {
         const m = Math.floor(seconds / 60);
@@ -54,7 +69,7 @@ export function Game() {
 
                 {/* Topic Info */}
                 <Card className="mt-8 bg-zinc-800/30">
-                    <p className="text-gray-400 text-sm mb-2">Topico</p>
+                    <p className="text-gray-400 text-sm mb-2">{TEXTS.game.topicLocation}</p>
                     <p className="text-xl font-bold text-white">
                         {topicName}
                     </p>
