@@ -8,10 +8,14 @@ import { TEXTS } from '../config/texts';
 import { TOPICS } from '../config/topics';
 
 import { synth } from '../utils/synth';
+import { useWakeLock } from '../hooks/useWakeLock';
 
 export function Game() {
     const { roundDuration, resetGame, startVoting, currentTopicId } = useGameStore();
     const [timeLeft, setTimeLeft] = useState(roundDuration);
+
+    // Prevent screen from sleeping during game
+    useWakeLock();
 
     const topicName = TOPICS.find(t => t.id === currentTopicId)?.name || 'Desconocido';
 
