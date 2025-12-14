@@ -5,14 +5,16 @@ import { Card } from '../components/ui/Card';
 import { Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TEXTS } from '../config/texts';
+import { TOPICS } from '../config/topics';
 
 import { synth } from '../utils/synth';
 
 export function Reveal() {
-    const { players, currentRevealIndex, location, markRoleSeen, nextReveal } = useGameStore();
+    const { players, currentRevealIndex, location, markRoleSeen, nextReveal, currentTopicId } = useGameStore();
     const [isRevealed, setIsRevealed] = useState(false);
 
     const currentPlayer = players[currentRevealIndex];
+    const currentTopic = TOPICS.find(t => t.id === currentTopicId);
 
     const handleReveal = () => {
         setIsRevealed(true);
@@ -79,6 +81,13 @@ export function Reveal() {
                                         <div className="text-5xl font-black text-white drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">{TEXTS.reveal.impostor}</div>
                                     </div>
                                     <p className="text-gray-300 max-w-[200px] mx-auto">{TEXTS.reveal.impostorInstruction}</p>
+
+                                    {currentTopic?.impostorHint && (
+                                        <div className="mt-4 p-4 bg-red-900/40 rounded-xl border border-red-500/30">
+                                            <p className="text-xs text-red-300 uppercase tracking-widest font-bold mb-1">Pista</p>
+                                            <p className="text-white text-lg font-bold">{currentTopic.impostorHint}</p>
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 <div className="space-y-6 animate-in zoom-in duration-300">
