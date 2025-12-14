@@ -9,14 +9,23 @@ import { CACHE_TAG } from '../config/topics';
 
 export function Lobby() {
     const [name, setName] = useState('');
+    const [error, setError] = useState('');
     const { players, addPlayer, removePlayer, startGame } = useGameStore();
 
     const handleAdd = (e?: React.FormEvent) => {
         e?.preventDefault();
-        if (name.trim()) {
-            addPlayer(name.trim());
-            setName('');
+        const trimmedName = name.trim();
+
+        if (!trimmedName) return;
+
+        if (players.some(p => p.name.toLowerCase() === trimmedName.toLowerCase())) {
+            setError('¡Este jugador ya está en la lista!');
+            return;
         }
+
+        addPlayer(trimmedName);
+        setName('');
+        setError('');
     };
 
     return (
@@ -29,15 +38,27 @@ export function Lobby() {
             </div>
 
             <Card className="flex flex-col gap-4 shadow-2xl shadow-purple-900/20">
-                <form onSubmit={handleAdd} className="flex gap-2">
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder={TEXTS.lobby.inputPlaceholder}
-                        className="flex-1 bg-zinc-800/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-blue-500/50 focus:bg-zinc-800/80 transition-colors"
-                    />
-                    <Button type="submit" size="sm" variant="secondary" disabled={!name.trim()} className="aspect-square px-0 w-12">
+                <form onSubmit={handleAdd} className={`flex gap-2 relative transition-all ${error ? 'mb-6' : ''}`}>
+                    <div className="flex-1 relative">
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => {
+                                setName(e.target.value);
+                                setError('');
+                            }}
+                            placeholder={TEXTS.lobby.inputPlaceholder}
+                            className={`w-full bg-zinc-800/50 border rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:bg-zinc-800/80 transition-colors
+                                ${error ? 'border-red-500 focus:border-red-500' : 'border-white/10 focus:border-blue-500/50'}
+                            `}
+                        />
+                        {error && (
+                            <span className="absolute -bottom-6 left-0 text-xs text-red-400 font-medium animate-in slide-in-from-top-1">
+                                {error}
+                            </span>
+                        )}
+                    </div>
+                    <Button type="submit" size="sm" variant="secondary" disabled={!name.trim()} className="aspect-square px-0 w-12 h-12">
                         <UserPlus size={20} />
                     </Button>
                 </form>
