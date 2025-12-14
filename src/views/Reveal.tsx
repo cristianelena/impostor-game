@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TEXTS } from '../config/texts';
 import { TOPICS } from '../config/topics';
@@ -33,6 +33,13 @@ export function Reveal() {
 
     return (
         <div className="flex flex-col h-full items-center justify-center p-4 relative z-20">
+            <button
+                onClick={() => window.history.back()}
+                className="absolute top-4 right-4 z-50 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+                aria-label="Cerrar y volver a selección de tema"
+            >
+                <X size={24} className="text-white/70" />
+            </button>
             <AnimatePresence mode="wait">
                 {!isRevealed ? (
                     <motion.div
@@ -82,12 +89,17 @@ export function Reveal() {
                                     </div>
                                     <p className="text-gray-300 max-w-[200px] mx-auto">{TEXTS.reveal.impostorInstruction}</p>
 
-                                    {currentTopic?.impostorHint && (
-                                        <div className="mt-4 p-4 bg-red-900/40 rounded-xl border border-red-500/30">
-                                            <p className="text-xs text-red-300 uppercase tracking-widest font-bold mb-1">Pista</p>
-                                            <p className="text-white text-lg font-bold">{currentTopic.impostorHint}</p>
-                                        </div>
-                                    )}
+                                    {(() => {
+                                        const currentLocationObj = currentTopic?.locations.find(l => l.name === location);
+                                        const hint = currentLocationObj?.impostorHint;
+
+                                        return hint ? (
+                                            <div className="mt-4 p-4 bg-red-900/40 rounded-xl border border-red-500/30">
+                                                <p className="text-xs text-red-300 uppercase tracking-widest font-bold mb-1">Pista</p>
+                                                <p className="text-white text-lg font-bold">{hint}</p>
+                                            </div>
+                                        ) : null;
+                                    })()}
                                 </div>
                             ) : (
                                 <div className="space-y-6 animate-in zoom-in duration-300">

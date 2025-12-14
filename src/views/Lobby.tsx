@@ -5,6 +5,7 @@ import { Card } from '../components/ui/Card';
 import { Trash2, UserPlus, Play } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TEXTS } from '../config/texts';
+import { CACHE_TAG } from '../config/topics';
 
 export function Lobby() {
     const [name, setName] = useState('');
@@ -74,7 +75,7 @@ export function Lobby() {
 
             <div className="flex-1 min-h-4" /> {/* Spacer */}
 
-            <div className="pb-4 mt-auto">
+            <div className="pb-4 mt-auto space-y-4">
                 <Button
                     size="lg"
                     onClick={startGame}
@@ -83,6 +84,10 @@ export function Lobby() {
                 >
                     <Play size={24} className={players.length >= 3 ? "fill-white" : ""} /> {TEXTS.lobby.startGame}
                 </Button>
+
+                <p className="text-center text-xs text-white/10 font-mono">
+                    {CACHE_TAG}
+                </p>
             </div>
         </div>
     );

@@ -33,7 +33,41 @@ function App() {
   }, [requestPermission]);
 
   useEffect(() => {
-    // Play swoosh on phase change (except initial load if you want, but swoosh on load is fine/cool)
+    // Sync phase changes to URL hash
+    const targetHash = phase === 'TOPIC_SELECTION' ? 'topics' : phase.toLowerCase();
+    if (window.location.hash.slice(1) !== targetHash) {
+      window.history.pushState(null, '', `#${targetHash}`);
+    }
+  }, [phase]);
+
+  useEffect(() => {
+    // Handle back button / history navigation
+    const handlePopState = () => {
+      const hash = window.location.hash.slice(1);
+
+      switch (hash) {
+        case 'lobby': useGameStore.setState({ phase: 'LOBBY' }); break;
+        case 'topics': useGameStore.setState({ phase: 'TOPIC_SELECTION' }); break;
+        case 'reveal': useGameStore.setState({ phase: 'REVEAL' }); break;
+        case 'sorting': useGameStore.setState({ phase: 'SORTING' }); break;
+        case 'playing': useGameStore.setState({ phase: 'PLAYING' }); break;
+        case 'voting': useGameStore.setState({ phase: 'VOTING' }); break;
+        case 'results': useGameStore.setState({ phase: 'RESULTS' }); break;
+        default: break;
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    // Set initial hash if empty
+    if (!window.location.hash) {
+      window.history.replaceState(null, '', '#lobby');
+    }
+
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  useEffect(() => {
+    // Play swoosh on phase change
     synth.playSwoosh();
   }, [phase]);
 

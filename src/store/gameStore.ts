@@ -78,12 +78,13 @@ export const useGameStore = create<GameState>((set, get) => ({
 
         // Filter out used locations
         const topicUsed = usedLocations[topicId] || [];
-        const availableLocations = topic.locations.filter(loc => !topicUsed.includes(loc));
+        const availableLocations = topic.locations.filter(loc => !topicUsed.includes(loc.name));
 
         if (availableLocations.length === 0) return; // Should not happen if UI handles it
 
         // Pick random location from available
-        const location = availableLocations[Math.floor(Math.random() * availableLocations.length)];
+        const locationObj = availableLocations[Math.floor(Math.random() * availableLocations.length)];
+        const location = locationObj.name;
 
         // Update used locations
         const newUsedLocations = {
