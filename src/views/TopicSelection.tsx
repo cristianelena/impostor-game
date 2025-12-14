@@ -2,12 +2,20 @@ import { useGameStore } from '../store/gameStore';
 import { Card } from '../components/ui/Card';
 import { TOPICS } from '../config/topics';
 import { motion } from 'framer-motion';
+import { X } from 'lucide-react';
 
 export function TopicSelection() {
     const { selectTopicAndStart, usedLocations } = useGameStore();
 
     return (
         <div className="flex flex-col h-full gap-6 relative z-20">
+            <button
+                onClick={() => window.history.back()}
+                className="absolute top-4 right-4 z-50 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+                aria-label="Volver al lobby"
+            >
+                <X size={24} className="text-white/70" />
+            </button>
             <div className="text-center space-y-2 pt-8">
                 <h2 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
                     Elige un Tema
