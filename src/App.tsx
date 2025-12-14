@@ -11,9 +11,26 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import { synth } from './utils/synth';
 import { useEffect } from 'react';
+import { useLocalNotifications } from './hooks/useLocalNotifications';
 
 function App() {
   const phase = useGameStore((state) => state.phase);
+  const { requestPermission } = useLocalNotifications();
+
+  useEffect(() => {
+    // Request permission on first interaction implicitly or here if user engages
+    // Best practice is usually on a button click, but we can init the hook logic here
+  }, []);
+
+  // Expose requestPermission to be called possibly after a game ends or on first click
+  useEffect(() => {
+    const handleInteraction = () => {
+      requestPermission();
+      window.removeEventListener('click', handleInteraction);
+    };
+    window.addEventListener('click', handleInteraction);
+    return () => window.removeEventListener('click', handleInteraction);
+  }, [requestPermission]);
 
   useEffect(() => {
     // Play swoosh on phase change (except initial load if you want, but swoosh on load is fine/cool)
