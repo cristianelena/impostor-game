@@ -14,36 +14,52 @@ export function Game() {
     const { roundDuration, resetGame, startVoting, currentTopicId } = useGameStore();
     const [timeLeft, setTimeLeft] = useState(roundDuration);
 
+    const [lastTick, setLastTick] = useState<number | null>(null);
+    const [alarmPlayed, setAlarmPlayed] = useState(false);
+
     // Prevent screen from sleeping during game
     useWakeLock();
 
     const topicName = TOPICS.find(t => t.id === currentTopicId)?.name || 'Desconocido';
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setTimeLeft((prev) => {
-                if (prev <= 0) {
-                    clearInterval(timer);
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-        return () => clearInterval(timer);
-    }, []);
+        let animationFrameId: number;
+        let startTime: number | null = null;
+        let initialTimeLeft = roundDuration * 1000;
 
-    // Sound Effect Logic
+        const updateTimer = (timestamp: number) => {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            const remaining = Math.max(0, initialTimeLeft - elapsed);
+
+            const remainingSeconds = Math.ceil(remaining / 1000);
+            setTimeLeft(remainingSeconds);
+
+            if (remaining > 0) {
+                animationFrameId = requestAnimationFrame(updateTimer);
+            }
+        };
+
+        animationFrameId = requestAnimationFrame(updateTimer);
+
+        return () => cancelAnimationFrame(animationFrameId);
+    }, [roundDuration]);
+
     useEffect(() => {
-        if (timeLeft === 0) {
+        if (timeLeft === lastTick) return;
+        setLastTick(timeLeft);
+
+        if (timeLeft === 0 && !alarmPlayed) {
+            setAlarmPlayed(true);
             // Alarm
             synth.playTone(880, 0.2, 'square');
             setTimeout(() => synth.playTone(880, 0.2, 'square'), 300);
             setTimeout(() => synth.playTone(880, 0.2, 'square'), 600);
-        } else if (timeLeft <= 10) {
+        } else if (timeLeft <= 10 && timeLeft > 0) {
             // Tick
             synth.playClick('soft');
         }
-    }, [timeLeft]);
+    }, [timeLeft, lastTick, alarmPlayed]);
 
     const formatTime = (seconds: number) => {
         const m = Math.floor(seconds / 60);
