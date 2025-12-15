@@ -10,11 +10,12 @@ import { Results } from './views/Results';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { synth } from './utils/synth';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocalNotifications } from './hooks/useLocalNotifications';
 
 function App() {
   const phase = useGameStore((state) => state.phase);
+  const prevPhase = useRef(phase);
   const { requestPermission } = useLocalNotifications();
 
   useEffect(() => {
@@ -35,9 +36,26 @@ function App() {
   useEffect(() => {
     // Sync phase changes to URL hash
     const targetHash = phase === 'TOPIC_SELECTION' ? 'topics' : phase.toLowerCase();
-    if (window.location.hash.slice(1) !== targetHash) {
+
+    // Prevent duplicate history entries if hash matches
+    if (window.location.hash.slice(1) === targetHash) return;
+
+    const isGamePhase = (p: string) => ['REVEAL', 'SORTING', 'PLAYING', 'VOTING', 'RESULTS'].includes(p);
+
+    // Logic for history navigation
+    if (prevPhase.current === 'RESULTS' && phase === 'TOPIC_SELECTION') {
+      // If going back to topics from results (reset), go back in history
+      // instead of pushing new state if possible
+      window.history.back();
+    } else if (isGamePhase(prevPhase.current) && isGamePhase(phase)) {
+      // Replace history during game progression
+      window.history.replaceState(null, '', `#${targetHash}`);
+    } else {
+      // Push new entry for major navigation
       window.history.pushState(null, '', `#${targetHash}`);
     }
+
+    prevPhase.current = phase;
   }, [phase]);
 
   useEffect(() => {
@@ -69,6 +87,22 @@ function App() {
   useEffect(() => {
     // Play swoosh on phase change
     synth.playSwoosh();
+
+    // Update Document Title
+    const baseTitle = "Impostor Game";
+    let subTitle = "";
+
+    switch (phase) {
+      case 'LOBBY': subTitle = "Jugadores"; break;
+      case 'TOPIC_SELECTION': subTitle = "Elige un Tema"; break;
+      case 'REVEAL': subTitle = "Asignación de perfiles"; break;
+      case 'SORTING': subTitle = "Quien comienza?"; break;
+      case 'PLAYING': subTitle = "Juguemos!"; break;
+      case 'VOTING': subTitle = "Votemos!"; break;
+      case 'RESULTS': subTitle = "El impostor era..."; break;
+    }
+
+    document.title = subTitle ? `${baseTitle} - ${subTitle}` : baseTitle;
   }, [phase]);
 
   return (
